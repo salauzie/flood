@@ -1,0 +1,87 @@
+User Story
+----------------------------------
+As a car driver in rainy weather, I want to look up how to get from Point A to Point B safely.
+
+Set up Production/Development
+----------------------------------
+-Github
+-Bootstrap
+-CSS
+-Rails
+-Heroku
+-AWS
+
+2 hours
+
+----------------------------------
+Elements
+----------------------------------
+-header
+	-logo
+-content
+
+*Using a Bootstrap template.
+----------------------------------
+Header
+----------------------------------
+-logo
+	-style
+
+1 hour
+
+----------------------------------
+Content
+----------------------------------
+-Front page content
+	-jumbotron
+		-style
+	-box1
+		-style
+	-box2
+		-style
+
+2 hours
+
+-Map/Route page content	
+	-crud
+		-controllers
+		-models
+		-views
+		-testing
+5 hours
+
+-tide levels
+	-list of current tide levels
+	-controllers
+		-models
+		-views
+		-testing
+
+5 hours	
+
+
+-Prone to flooding
+	-list/map of areas that flood
+
+1 hour			
+
+----------------------------------
+API's
+----------------------------------	
+-Incorporate Google Maps API, weather underground api, tide api
+-Google Maps
+	-input start and end points
+	-show map
+	-show route
+-Weather underground api
+	-show radar animation on home page
+	-show current weather
+-tide api
+	-show current tide
+-start making api's work together	
+
+2-3 days
+
+*Using back end and incorporating outside API's
+
+
