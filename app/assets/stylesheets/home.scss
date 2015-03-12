@@ -1,3 +1,39 @@
-body {
+#header {
+	background: #203864;
+	font-family: 'Lobster', cursive;
+	color: #19528B;
+}
+
+
+#content {
 	background-image: image-url('city-map1.jpg');
+	background-repeat: none;
+	background-size: cover;
+	width: 100%;
+	height: 900px;
+	padding-top: 150px;
+	}
+
+.btn.btn-primary.btn-lg {
+	color: #203864;
+	background: #19528B;
+	font-weight: bolder;
+}	
+
+.jumbotron {
+	background-color: rgba(240, 248, 255, .6);
+	padding-top: 150px;
+	padding-bottom: 75px;
+}
+
+
+.images {
+	display: flex;
+	justify-content: space-between;
+	img {
+		width: 450px;
+		height: 360px;
+		margin-left: 10px;
+		margin-right: 10px;
+	}
 }

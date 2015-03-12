@@ -8,6 +8,7 @@ Set up Production/Development
 -Bootstrap
 -CSS
 -Rails
+-javascript
 -Heroku
 -AWS
 
