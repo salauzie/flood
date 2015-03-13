@@ -9,9 +9,9 @@
 		.row
 			.col-lg-6.col-lg-offset-3
 				.jumbotron.text-center
-					%a.btn.btn-primary.btn-lg{:href => "#", :role => "button"} Map my route!
+					= link_to "Map my route!", maps_path, :class => "btn btn-primary btn-lg"
 #body
 	.container
 		.images
 			= image_tag("flood.jpg", :class => 'image-1')	
-			= image_tag("Waves.jpg", :class => 'image-2')
+			= image_tag("waves.jpg", :class => 'image-2')
