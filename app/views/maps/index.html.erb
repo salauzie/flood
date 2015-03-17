@@ -44,7 +44,7 @@
 				var currentLocation = new google.maps.LatLng(location.coords.latitude, location.coords.longitude);
 
 			  var mapOptions = {
-			    zoom: 10,
+			    zoom: 8,
 			    center: currentLocation
 			  	};
 
@@ -53,14 +53,6 @@
 			  	position: currentLocation,
 			  	map: map
 			  });
-
-			  // var input = document.getElementById('pac-input');
-			  // map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
-
-			  // var autocomplete = new google.maps.places.Autocomplete(input);
-
-			  // var searchBox = new google.maps.places.SearchBox((input));
-			  // service = new google.maps.places.PlacesService(map);
 
 			  var trafficLayer = new google.maps.TrafficLayer();
 					$('#toggle_traffic').click(function () {
@@ -95,7 +87,7 @@
   // Create the search box and link it to the UI element.
   var input = /** @type {HTMLInputElement} */(
       document.getElementById('pac-input'));
-  map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+  // map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
 
   var searchBox = new google.maps.places.SearchBox(
     /** @type {HTMLInputElement} */(input));
@@ -115,6 +107,13 @@
     // For each place, get the icon, place name, and location.
     markers = [];
     var bounds = new google.maps.LatLngBounds();
+  //   if (marker > 1) {
+		//   map.fitBounds(mapBounds);
+		// }
+		// else if (marker == 1) {
+		//   map.setCenter(mapBounds.getCenter());
+		//   map.setZoom(14);
+		// };
     for (var i = 0, place; place = places[i]; i++) {
       var image = {
         url: place.icon,
@@ -146,6 +145,23 @@
     var bounds = map.getBounds();
     searchBox.setBounds(bounds);
   });
+    var directionsService = new google.maps.DirectionsService();
+    var directionsDisplay = new google.maps.DirectionsRenderer();
+
+     directionsDisplay.setMap(map);
+     directionsDisplay.setPanel(document.getElementById('panel'));
+
+    var request = {
+       origin: currentLocation, 
+       destination: 'Mount Pleasant',
+       travelMode: google.maps.DirectionsTravelMode.DRIVING
+     };
+
+    directionsService.route(request, function(response, status) {
+       if (status == google.maps.DirectionsStatus.OK) {
+         directionsDisplay.setDirections(response);
+       }
+    });
 }
 
 
@@ -157,8 +173,15 @@
 	</script>
 </head>	
 <body>
+<!-- <strong>Start: </strong>
+<input id="start" type="text" placeholder="Start typing here"> -->
+<strong>Where do you want to go? </strong>
 <input id="pac-input" class="controls" type="text" placeholder="Start typing here">
-<div id="map-canvas"></div>
+<button>Get Directions</button>
+<div>
+<div id="map-canvas"></div> 
+<div id="panel" style="width: 300px; float: right;"></div>
+</div> 
 <button id="toggle_traffic">Traffic</button>
 <button id="toggle_weather">Weather</button>
 
