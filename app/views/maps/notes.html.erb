@@ -3,15 +3,20 @@
   #map-canvas {
     height: 500px;
   }
+
   </style>
   <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
   <script type="text/javascript"
-  src="https://maps.googleapis.com/maps/api/js?libraries=places,weather&sensor=false">
+  src="https://maps.googleapis.com/maps/api/js?libraries=places,weather&sensor=true">  </script>
   </script>
   <script type="text/javascript">
 
-    var markers = [];
+    // var markers = [];
     var map;
+    var directionsDisplay;
+    var elevator;
+    var chart;
+    var polyline;
 
     // var service;
 
@@ -37,22 +42,48 @@
     //  }
     //  service.nearbySearch(request, handleSearchResults);
     // }
+    // Load the Visualization API and the columnchart package.
+
     function initialize(location)
     {
+
       console.log(location);
+    // elevator = new google.maps.ElevationService();
+    
+    // drawPath();
 
-        var currentLocation = new google.maps.LatLng(location.coords.latitude, location.coords.longitude);
+    var input = document.getElementById('from');
+    // var options = {
+    //     types: ['(cities)']
+    // };
+    var autocomplete = new google.maps.places.Autocomplete(input);
+    
+    google.maps.event.addDomListener(window, 'load', initialize); 
+    var input1 = document.getElementById('to');
+    // var options = {
+    //     types: ['(cities)']
+    // };
 
-        var mapOptions = {
-          zoom: 12,
-          center: currentLocation
-          };
+    var autocomplete = new google.maps.places.Autocomplete(input1);
+    
+    google.maps.event.addDomListener(window, 'load', initialize); 
+      var currentLocation = new google.maps.LatLng(location.coords.latitude, location.coords.longitude);
+
+      var mapOptions = {
+        zoom: 12,
+        center: currentLocation,
+        mapTypeId: 'terrain'
+        };
+          // Create an ElevationService
+      // elevator = new google.maps.ElevationService();
+      // Add a listener for the click event and call getElevation on that location
+      // google.maps.event.addListener(map, 'click', getElevation);  
 
         map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions), {mapTypeId: google.maps.MapTypeId.ROADMAP}; 
-        var marker = new google.maps.Marker({
-          position: currentLocation,
-          map: map
-        });
+        // var marker = new google.maps.Marker({
+        //   position: currentLocation,
+        //   map: map
+        // });
 
         var trafficLayer = new google.maps.TrafficLayer();
           $('#toggle_traffic').click(function () {
@@ -79,36 +110,33 @@
             weatherLayer.setMap(map);
           }
         });
-        $("#calculate-route").submit(function(event) {
-        event.preventDefault();
-        calculateRoute($("#from").val(), $("#to").val());
-      }); 
-        var from = $("#from").val();
-        var to = $("#to").val();
-        var directionsService = new google.maps.DirectionsService();
-        var directionsRequest = {
-          origin: from,
-          destination: to,
-          travelMode: google.maps.DirectionsTravelMode.DRIVING,
-          unitSystem: google.maps.UnitSystem.IMPERIAL
-        };
-        directionsService.route(
-          directionsRequest,
-          function(response, status)
-          {
-            if (status == google.maps.DirectionsStatus.OK)
-            {
-              new google.maps.DirectionsRenderer({
-                map: map,
-                directions: response
-              });
-            }
-            else
-              $("#error").append("Unable to retrieve your route<br />");
-          }
-        );
+     
+        // var from = $("#from").val();
+        // var to = $("#to").val();
+        // var directionsService = new google.maps.DirectionsService();
+        // var directionsRequest = {
+        //   origin: from,
+        //   destination: to,
+        //   travelMode: google.maps.DirectionsTravelMode.DRIVING,
+        //   unitSystem: google.maps.UnitSystem.IMPERIAL
+        // };
+        // directionsService.route(
+        //   directionsRequest,
+        //   function(response, status)
+        //   {
+        //     if (status == google.maps.DirectionsStatus.OK)
+        //     {
+        //       new google.maps.DirectionsRenderer({
+        //         map: map,
+        //         directions: response
+        //       });
+        //     }
+        //     else
+        //       $("#error").append("Unable to retrieve your route<br />");
+        //   }
+        // );
       }
-}
+
     //      var defaultBounds = new google.maps.LatLngBounds(
   //     new google.maps.LatLng(location.coords.latitude, location.coords.longitude),
   //     new google.maps.LatLng(location.coords.latitude, location.coords.longitude));
@@ -208,11 +236,96 @@
 //   }
 // }
 // }
+function calculateRoute(from, to) {
+
+  var directionsService = new google.maps.DirectionsService();
+  var directionsRequest = {
+    origin: from,
+    destination: to,
+    travelMode: google.maps.DirectionsTravelMode.DRIVING,
+    unitSystem: google.maps.UnitSystem.IMPERIAL
+  };
+  var directionsDisplay = new google.maps.DirectionsRenderer();
+
+    directionsDisplay.setMap(map);
+    directionsDisplay.setPanel(document.getElementById('panel'));
+    directionsService.route(
+      directionsRequest,
+      function(response, status)
+      {
+        if (status == google.maps.DirectionsStatus.OK)
+        {
+          directionsDisplay.setDirections(response);
+          // new google.maps.DirectionsRenderer({
+          //   map: map,
+          //   directions: response
+          // });
+        }
+        else
+          $("#error").append("Unable to retrieve your route<br />");
+      }
+        );
+      }
+
+//     function initialize() {
+//     var input = document.getElementById('from');
+//     var options = {
+//         types: ['(cities)']
+//     };
+//     var autocomplete = new google.maps.places.Autocomplete(input);
+//     }
+//     google.maps.event.addDomListener(window, 'load', initialize);
+
+
+// function initialize1() {
+//     var input1 = document.getElementById('to');
+//     var options = {
+//         types: ['(cities)']
+//     };
+//     var autocomplete = new google.maps.places.Autocomplete(input1);
+//     }
+//     google.maps.event.addDomListener(window, 'load', initialize1);    
 
     $(document).ready(function()
     {
-      navigator.geolocation.getCurrentPosition(initialize);
+      if (typeof navigator.geolocation == "undefined") {
+          $("#error").text("Your browser doesn't support the Geolocation API");
+          return;
+        }
+ 
+        $("#from-link, #to-link").click(function(event) {
+          event.preventDefault();
+          var addressId = this.id.substring(0, this.id.indexOf("-"));
+ 
+          navigator.geolocation.getCurrentPosition(function(position) {
+            var geocoder = new google.maps.Geocoder();
+            geocoder.geocode({
+              "location": new google.maps.LatLng(position.coords.latitude, position.coords.longitude)
+            },
+            function(results, status) {
+              if (status == google.maps.GeocoderStatus.OK)
+                $("#" + addressId).val(results[0].formatted_address);
+              else
+                $("#error").append("Unable to retrieve your address<br />");
+            });
+          },
+          function(positionError){
+            $("#error").append("Error: " + positionError.message + "<br />");
+          },
+          {
+            enableHighAccuracy: true,
+            timeout: 10 * 1000 // 10 seconds
+          });
+        });
+ 
+        $("#calculate-route").submit(function(event) {
+          event.preventDefault();
+          calculateRoute($("#from").val(), $("#to").val());
+        });
+        navigator.geolocation.getCurrentPosition(initialize);
       });
+      
+      
   </script>
 </head> 
 <body>
@@ -220,13 +333,13 @@
 <input id="start" type="text" placeholder="Start typing here"> -->
 <form id="calculate-route" name="calculate-route" action="#" method="get">
   <label for="from">From:</label>
-  <input type="text" id="from" name="from" required="required" placeholder="An address" size="30" />
-  <a id="from-link" href="#">Get my position</a>
+  <input type="text" id="from" name="from" required="required" placeholder="Enter Location" size="30" />
+  <a id="from-link" href="#">Use my location</a>
   <br />
  
   <label for="to">To:</label>
-  <input type="text" id="to" name="to" required="required" placeholder="Another address" size="30" />
-  <a id="to-link" href="#">Get my position</a>
+  <input type="text" id="to" name="to" required="required" placeholder="Enter Location" size="30" />
+  <a id="to-link" href="#">Use my location</a>
   <br />
  
   <input type="submit" />
@@ -234,11 +347,12 @@
 </form>
 <!-- <strong>Where do you want to go? </strong>
 <input id="pac-input" class="controls" type="text" placeholder="Start typing here">
-<button>Get Directions</button>
-<div> -->
+<button>Get Directions</button> -->
+<div>
 <div id="map-canvas"></div> 
-<!-- <div id="panel" style="width: 300px; float: right;"></div>
-</div>  -->
+<div id="panel" style="width: 50%;"></div>
+<div id="elevation_chart"></div>
+</div> 
 <button id="toggle_traffic">Traffic</button>
 <button id="toggle_weather">Weather</button>
 
