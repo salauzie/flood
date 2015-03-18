@@ -1,187 +1,302 @@
 <head>
-	<style type="text/css">
-	#map-canvas {
-		height: 500px;
-	}
-	</style>
+  <style type="text/css">
+  #map-canvas {
+    height: 500px;
+  }
+  </style>
   <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
   <script type="text/javascript"
   src="https://maps.googleapis.com/maps/api/js?libraries=places,weather&sensor=false">
   </script>
-	<script type="text/javascript">
+  <script type="text/javascript">
 
-		var markers = [];
-		var map;
+    // var markers = [];
+    var map;
 
-		// var service;
+    // var service;
 
-		// function handleSearchResults(results, status)
-		// {
-		// 	console.log(results);
+    // function handleSearchResults(results, status)
+    // {
+    //  console.log(results);
 
-		// 	for(var i = 0; i < results.length; i++) {
-		// 			var marker = new google.maps.Marker({
-		// 	  	position: results[i].geometry.location,
-		// 	  	map: map,
-		// 	  	icon: results[i].icon
-		// 	  });
+    //  for(var i = 0; i < results.length; i++) {
+    //      var marker = new google.maps.Marker({
+    //      position: results[i].geometry.location,
+    //      map: map,
+    //      icon: results[i].icon
+    //    });
 
-		// 	}
-		// }
+    //  }
+    // }
 
-		// function performSearch()
-		// {
-		// 	var request = {
-		// 		bounds: map.getBounds(),
-		// 		name: "McDonald's"
-		// 	}
-		// 	service.nearbySearch(request, handleSearchResults);
-		// }
-		function initialize(location)
-		{
-			console.log(location);
+    // function performSearch()
+    // {
+    //  var request = {
+    //    bounds: map.getBounds(),
+    //    name: "McDonald's"
+    //  }
+    //  service.nearbySearch(request, handleSearchResults);
+    // }
+    function initialize(location)
+    {
 
-				var currentLocation = new google.maps.LatLng(location.coords.latitude, location.coords.longitude);
+      console.log(location);
 
-			  var mapOptions = {
-			    zoom: 8,
-			    center: currentLocation
-			  	};
+        var currentLocation = new google.maps.LatLng(location.coords.latitude, location.coords.longitude);
 
-			  map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions), {mapTypeId: google.maps.MapTypeId.ROADMAP};	
-			  var marker = new google.maps.Marker({
-			  	position: currentLocation,
-			  	map: map
-			  });
+        var mapOptions = {
+          zoom: 12,
+          center: currentLocation
+          };
 
-			  var trafficLayer = new google.maps.TrafficLayer();
-					$('#toggle_traffic').click(function () {
-					if (trafficLayer.getMap()){
-						trafficLayer.setMap(null);
-					}
-					else {
-						trafficLayer.setMap(map);
-					}
-				});
+        map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions), {mapTypeId: google.maps.MapTypeId.ROADMAP}; 
+        // var marker = new google.maps.Marker({
+        //   position: currentLocation,
+        //   map: map
+        // });
 
-				var weatherLayer = new google.maps.weather.WeatherLayer({
-					temperatureUnits: google.maps.weather.TemperatureUnit.FAHRENHEIT
-				});
-				var cloudLayer = new google.maps.weather.CloudLayer();
+        var trafficLayer = new google.maps.TrafficLayer();
+          $('#toggle_traffic').click(function () {
+          if (trafficLayer.getMap()){
+            trafficLayer.setMap(null);
+          }
+          else {
+            trafficLayer.setMap(map);
+          }
+        });
 
-				$('#toggle_weather').click(function() {
+        var weatherLayer = new google.maps.weather.WeatherLayer({
+          temperatureUnits: google.maps.weather.TemperatureUnit.FAHRENHEIT
+        });
+        var cloudLayer = new google.maps.weather.CloudLayer();
 
-					if (weatherLayer.getMap() || cloudLayer.getMap()) {
-						weatherLayer.setMap(null);
-						cloudLayer.setMap(null);
-					}
-					else {
-						weatherLayer.setMap(map);
-					}
-				});	
-				  var defaultBounds = new google.maps.LatLngBounds(
-      new google.maps.LatLng(location.coords.latitude, location.coords.longitude),
-      new google.maps.LatLng(location.coords.latitude, location.coords.longitude));
-  map.fitBounds(defaultBounds);
+        $('#toggle_weather').click(function() {
+
+          if (weatherLayer.getMap() || cloudLayer.getMap()) {
+            weatherLayer.setMap(null);
+            cloudLayer.setMap(null);
+          }
+          else {
+            weatherLayer.setMap(map);
+          }
+        });
+     
+        var from = $("#from").val();
+        var to = $("#to").val();
+        var directionsService = new google.maps.DirectionsService();
+        var directionsRequest = {
+          origin: from,
+          destination: to,
+          travelMode: google.maps.DirectionsTravelMode.DRIVING,
+          unitSystem: google.maps.UnitSystem.IMPERIAL
+        };
+        directionsService.route(
+          directionsRequest,
+          function(response, status)
+          {
+            if (status == google.maps.DirectionsStatus.OK)
+            {
+              new google.maps.DirectionsRenderer({
+                map: map,
+                directions: response
+              });
+            }
+            else
+              $("#error").append("Unable to retrieve your route<br />");
+          }
+        );
+      }
+
+    //      var defaultBounds = new google.maps.LatLngBounds(
+  //     new google.maps.LatLng(location.coords.latitude, location.coords.longitude),
+  //     new google.maps.LatLng(location.coords.latitude, location.coords.longitude));
+  // map.fitBounds(defaultBounds);
 
   // Create the search box and link it to the UI element.
-  var input = /** @type {HTMLInputElement} */(
-      document.getElementById('pac-input'));
-  // map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+//   var input = /** @type {HTMLInputElement} */(
+//       document.getElementById('pac-input'));
+//   // map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
 
-  var searchBox = new google.maps.places.SearchBox(
-    /** @type {HTMLInputElement} */(input));
+//   var searchBox = new google.maps.places.SearchBox(
+//     /** @type {HTMLInputElement} */(input));
 
-  // Listen for the event fired when the user selects an item from the
-  // pick list. Retrieve the matching places for that item.
-  google.maps.event.addListener(searchBox, 'places_changed', function() {
-    var places = searchBox.getPlaces();
+//   // Listen for the event fired when the user selects an item from the
+//   // pick list. Retrieve the matching places for that item.
+//   google.maps.event.addListener(searchBox, 'places_changed', function() {
+//     var places = searchBox.getPlaces();
 
-    if (places.length == 0) {
-      return;
-    }
-    for (var i = 0, marker; marker = markers[i]; i++) {
-      marker.setMap(null);
-    }
+//     if (places.length == 0) {
+//       return;
+//     }
+//     for (var i = 0, marker; marker = markers[i]; i++) {
+//       marker.setMap(null);
+//     }
 
-    // For each place, get the icon, place name, and location.
-    markers = [];
-    var bounds = new google.maps.LatLngBounds();
-  //   if (marker > 1) {
-		//   map.fitBounds(mapBounds);
-		// }
-		// else if (marker == 1) {
-		//   map.setCenter(mapBounds.getCenter());
-		//   map.setZoom(14);
-		// };
-    for (var i = 0, place; place = places[i]; i++) {
-      var image = {
-        url: place.icon,
-        size: new google.maps.Size(71, 71),
-        origin: new google.maps.Point(0, 0),
-        anchor: new google.maps.Point(17, 34),
-        scaledSize: new google.maps.Size(25, 25)
-      };
+//     // For each place, get the icon, place name, and location.
+//     markers = [];
+//     var bounds = new google.maps.LatLngBounds();
+//   //   if (marker > 1) {
+//    //   map.fitBounds(mapBounds);
+//    // }
+//    // else if (marker == 1) {
+//    //   map.setCenter(mapBounds.getCenter());
+//    //   map.setZoom(14);
+//    // };
+//     for (var i = 0, place; place = places[i]; i++) {
+//       var image = {
+//         url: place.icon,
+//         size: new google.maps.Size(71, 71),
+//         origin: new google.maps.Point(0, 0),
+//         anchor: new google.maps.Point(17, 34),
+//         scaledSize: new google.maps.Size(25, 25)
+//       };
 
-      // Create a marker for each place.
-      var marker = new google.maps.Marker({
-        map: map,
-        // icon: image,
-        title: place.name,
-        position: place.geometry.location
+//       // Create a marker for each place.
+//       var marker = new google.maps.Marker({
+//         map: map,
+//         // icon: image,
+//         title: place.name,
+//         position: place.geometry.location
+//       });
+
+//       markers.push(marker);
+
+//       bounds.extend(place.geometry.location);
+//     }
+
+//     map.fitBounds(bounds);
+//   });
+
+//   // Bias the SearchBox results towards places that are within the bounds of the
+//   // current map's viewport.
+//   google.maps.event.addListener(map, 'bounds_changed', function() {
+//     var bounds = map.getBounds();
+//     searchBox.setBounds(bounds);
+//   });
+// }
+//     var directionsService = new google.maps.DirectionsService();
+//     var directionsDisplay = new google.maps.DirectionsRenderer();
+
+//      directionsDisplay.setMap(map);
+//      directionsDisplay.setPanel(document.getElementById('panel'));
+
+//     var request = {
+//        origin: currentLocation, 
+//        destination: 'Mount Pleasant',
+//        travelMode: google.maps.DirectionsTravelMode.DRIVING
+//      };
+
+//     directionsService.route(request, function(response, status) {
+//        if (status == google.maps.DirectionsStatus.OK) {
+//          directionsDisplay.setDirections(response);
+//        }
+//     });
+// }
+// function geolocate() {
+//   if (navigator.geolocation) {
+//     navigator.geolocation.getCurrentPosition(function(position) {
+//       var geolocation = new google.maps.LatLng(
+//           position.coords.latitude, position.coords.longitude);
+//       var circle = new google.maps.Circle({
+//         center: geolocation,
+//         radius: position.coords.accuracy
+//       });
+//       autocomplete.setBounds(circle.getBounds());
+//     });
+//   }
+// }
+// }
+function calculateRoute(from, to) {
+  var directionsService = new google.maps.DirectionsService();
+        var directionsRequest = {
+          origin: from,
+          destination: to,
+          travelMode: google.maps.DirectionsTravelMode.DRIVING,
+          unitSystem: google.maps.UnitSystem.IMPERIAL
+        };
+        directionsService.route(
+          directionsRequest,
+          function(response, status)
+          {
+            if (status == google.maps.DirectionsStatus.OK)
+            {
+              new google.maps.DirectionsRenderer({
+                map: map,
+                directions: response
+              });
+            }
+            else
+              $("#error").append("Unable to retrieve your route<br />");
+          }
+        );
+      }
+
+    $(document).ready(function()
+    {
+      if (typeof navigator.geolocation == "undefined") {
+          $("#error").text("Your browser doesn't support the Geolocation API");
+          return;
+        }
+ 
+        $("#from-link, #to-link").click(function(event) {
+          event.preventDefault();
+          var addressId = this.id.substring(0, this.id.indexOf("-"));
+ 
+          navigator.geolocation.getCurrentPosition(function(position) {
+            var geocoder = new google.maps.Geocoder();
+            geocoder.geocode({
+              "location": new google.maps.LatLng(position.coords.latitude, position.coords.longitude)
+            },
+            function(results, status) {
+              if (status == google.maps.GeocoderStatus.OK)
+                $("#" + addressId).val(results[0].formatted_address);
+              else
+                $("#error").append("Unable to retrieve your address<br />");
+            });
+          },
+          function(positionError){
+            $("#error").append("Error: " + positionError.message + "<br />");
+          },
+          {
+            enableHighAccuracy: true,
+            timeout: 10 * 1000 // 10 seconds
+          });
+        });
+ 
+        $("#calculate-route").submit(function(event) {
+          event.preventDefault();
+          calculateRoute($("#from").val(), $("#to").val());
+        });
+        navigator.geolocation.getCurrentPosition(initialize);
       });
-
-      markers.push(marker);
-
-      bounds.extend(place.geometry.location);
-    }
-
-    map.fitBounds(bounds);
-  });
-
-  // Bias the SearchBox results towards places that are within the bounds of the
-  // current map's viewport.
-  google.maps.event.addListener(map, 'bounds_changed', function() {
-    var bounds = map.getBounds();
-    searchBox.setBounds(bounds);
-  });
-    var directionsService = new google.maps.DirectionsService();
-    var directionsDisplay = new google.maps.DirectionsRenderer();
-
-     directionsDisplay.setMap(map);
-     directionsDisplay.setPanel(document.getElementById('panel'));
-
-    var request = {
-       origin: currentLocation, 
-       destination: 'Mount Pleasant',
-       travelMode: google.maps.DirectionsTravelMode.DRIVING
-     };
-
-    directionsService.route(request, function(response, status) {
-       if (status == google.maps.DirectionsStatus.OK) {
-         directionsDisplay.setDirections(response);
-       }
-    });
-}
-
-
-
-		$(document).ready(function()
-		{
-			navigator.geolocation.getCurrentPosition(initialize);
-			});
-	</script>
-</head>	
+      
+      
+  </script>
+</head> 
 <body>
 <!-- <strong>Start: </strong>
 <input id="start" type="text" placeholder="Start typing here"> -->
-<strong>Where do you want to go? </strong>
+<form id="calculate-route" name="calculate-route" action="#" method="get">
+  <label for="from">From:</label>
+  <input type="text" id="from" name="from" required="required" placeholder="An address" size="30" />
+  <a id="from-link" href="#">Get my position</a>
+  <br />
+ 
+  <label for="to">To:</label>
+  <input type="text" id="to" name="to" required="required" placeholder="Another address" size="30" />
+  <a id="to-link" href="#">Get my position</a>
+  <br />
+ 
+  <input type="submit" />
+  <input type="reset" />
+</form>
+<!-- <strong>Where do you want to go? </strong>
 <input id="pac-input" class="controls" type="text" placeholder="Start typing here">
 <button>Get Directions</button>
-<div>
+<div> -->
 <div id="map-canvas"></div> 
-<div id="panel" style="width: 300px; float: right;"></div>
-</div> 
+<!-- <div id="panel" style="width: 300px; float: right;"></div>
+</div>  -->
 <button id="toggle_traffic">Traffic</button>
 <button id="toggle_weather">Weather</button>
 
