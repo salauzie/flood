@@ -244,6 +244,7 @@ function calculateRoute(from, to) {
   var directionsRequest = {
     origin: from,
     destination: to,
+    provideRouteAlternatives: true,
     travelMode: google.maps.DirectionsTravelMode.DRIVING,
     unitSystem: google.maps.UnitSystem.IMPERIAL
   };
@@ -366,27 +367,28 @@ function getElevation(event) {
 <input id="start" type="text" placeholder="Start typing here"> -->
 <form id="calculate-route" name="calculate-route" action="#" method="get">
   <label for="from">From:</label>
-  <input type="text" id="from" name="from" required="required" placeholder="Enter Location" size="30" />
-  <a id="from-link" href="#">Use my location</a>
+  <input type="text" id="from" name="from" required="required" placeholder="Start typing or click Use my location" size="30" />
+  <a id="from-link" href="#" class="btn btn-default">Use my location</a>
   <br />
  
   <label for="to">To:</label>
-  <input type="text" id="to" name="to" required="required" placeholder="Enter Location" size="30" />
-  <a id="to-link" href="#">Use my location</a>
+  <input type="text" id="to" name="to" required="required" placeholder="Start typing or click Use my location" size="30" />
+  <a id="to-link" href="#" class="btn btn-default">Use my location</a>
   <br />
  
-  <input type="submit" />
-  <input type="reset" />
+  <input type="submit" class="btn btn-default"/>
+  <input type="reset" class="btn btn-default"/>
 </form>
+<button id="toggle_traffic" class="btn btn-default"> Traffic
+<span class="glyphicon glyphicon-road"></span></button>
+<button id="toggle_weather" class="btn btn-default"> Weather 
+<span class="glyphicon glyphicon-cloud"></span></button>
 <!-- <strong>Where do you want to go? </strong>
 <input id="pac-input" class="controls" type="text" placeholder="Start typing here">
 <button>Get Directions</button> -->
 <div>
 <div id="map-canvas"></div> 
 <div id="panel" style="width: 50%;"></div>
-<div id="elevation_chart"></div>
-</div> 
-<button id="toggle_traffic">Traffic</button>
-<button id="toggle_weather">Weather</button>
 
+</div> 
 </body>
