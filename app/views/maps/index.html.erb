@@ -1,7 +1,7 @@
 <head>
   <style type="text/css">
   #map-canvas {
-    height: 500px;
+    height: 400px;
   }
 
   </style>
@@ -258,11 +258,18 @@ function calculateRoute(from, to) {
       {
         if (status == google.maps.DirectionsStatus.OK)
         {
+          for (var i = 0, len = response.routes.length; i < len; i++) {
+                new google.maps.DirectionsRenderer({
+                    map: map,
+                    directions: response,
+                    routeIndex: i
+                });
+            }
           directionsDisplay.setDirections(response);
-          // new google.maps.DirectionsRenderer({
-          //   map: map,
-          //   directions: response
-          // });
+          new google.maps.DirectionsRenderer({
+            map: map,
+            directions: response
+          });
         }
         else
           $("#error").append("Unable to retrieve your route<br />");
@@ -365,30 +372,51 @@ function getElevation(event) {
 <body>
 <!-- <strong>Start: </strong>
 <input id="start" type="text" placeholder="Start typing here"> -->
-<form id="calculate-route" name="calculate-route" action="#" method="get">
+<!-- <form id="calculate-route" name="calculate-route" action="#" method="get">
   <label for="from">From:</label>
   <input type="text" id="from" name="from" required="required" placeholder="Start typing or click Use my location" size="30" />
-  <a id="from-link" href="#" class="btn btn-default">Use my location</a>
-  <br />
+  
+  <button id="from-link" href="#" class="btn btn-default"><span class="icon-location-arrow"></span></button>
  
   <label for="to">To:</label>
   <input type="text" id="to" name="to" required="required" placeholder="Start typing or click Use my location" size="30" />
-  <a id="to-link" href="#" class="btn btn-default">Use my location</a>
+  <button id="to-link" href="#" class="btn btn-default"><span class="icon-location-arrow"></button>
   <br />
  
-  <input type="submit" class="btn btn-default"/>
-  <input type="reset" class="btn btn-default"/>
+  <input type="submit" class="btn btn-default btn-lg"/>
+  <input type="reset" class="btn btn-default btn-lg"/>
 </form>
-<button id="toggle_traffic" class="btn btn-default"> Traffic
-<span class="glyphicon glyphicon-road"></span></button>
-<button id="toggle_weather" class="btn btn-default"> Weather 
-<span class="glyphicon glyphicon-cloud"></span></button>
+<button id="toggle_traffic" class="btn btn-default btn-lg"> Traffic
+<span class="icon-taxi-park-front"></span>
+</button>
+<button id="toggle_weather" class="btn btn-default btn-lg"> Weather 
+<span class="icon-cloud"></span></button> -->
 <!-- <strong>Where do you want to go? </strong>
 <input id="pac-input" class="controls" type="text" placeholder="Start typing here">
 <button>Get Directions</button> -->
 <div>
-<div id="map-canvas"></div> 
-<div id="panel" style="width: 50%;"></div>
+<div id="map-canvas"></div>
+<br>
+ <form id="calculate-route" name="calculate-route" action="#" method="get" style="width: 40%; float: left;">
+  <label for="from">From:</label>
+  <input type="text" id="from" name="from" required="required" placeholder="Start typing or click Use my location" size="30" />
+  
+  <a id="from-link" href="#" class="btn btn-default"><span class="icon-location-arrow"></span></a>
+ <br>
+  <label for="to">To:</label>
+  <input type="text" id="to" name="to" required="required" placeholder="Start typing or click Use my location" size="30" />
+  <a id="to-link" href="#" class="btn btn-default"><span class="icon-location-arrow"></a>
+  <br />
+ 
+  <input type="submit" class="btn btn-default btn-lg"/>
+  <input type="reset" class="btn btn-default btn-lg"/>
+<button id="toggle_traffic" class="btn btn-default btn-lg"> Traffic
+<span class="icon-taxi-park-front"></span>
+</button>
+<button id="toggle_weather" class="btn btn-default btn-lg"> Weather 
+<span class="icon-cloud"></span></button>
+</form>
+<div id="panel" style="width: 40%; float: right;"></div>
 
 </div> 
 </body>
