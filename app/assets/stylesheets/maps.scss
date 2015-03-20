@@ -1,14 +1,38 @@
-body {
-	color: #19528B;
+.input-group-addon {
+	color: #5CBDFF;
+	background: #19528B;
 	font-size: large;
-	text-align: center;
-}
-
-.btn.btn-default {
-	color: #19528B;
 	font-weight: bolder;
 }
 
-.btn-group {
+.btn.btn-default {
+	color: #5CBDFF;
+	background: #19528B;
+	font-weight: bolder;
+}
+
+body {
+	background-color: #337ab8;
+background-image: url(http://www.transparenttextures.com/patterns/white-wave.png);
+font-size: large;
+text-align: center;
+}
+
+.btn:hover {
+	color: #19528B;
+	background: white; 
+}
+
+
+.btn.btn-default.btn-lg {
 	text-align: center;
+}
+
+.input-group {
+	margin-left: 5%;
+}
+
+.panel {
+	margin-right: 5%;
+	border: 0;
 }
