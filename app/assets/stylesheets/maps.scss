@@ -13,7 +13,7 @@
 
 body {
 	background-color: #337ab8;
-background-image: url(http://www.transparenttextures.com/patterns/white-wave.png);
+background-image: url(http://www.transparenttextures.com/patterns/wavecut.png);
 font-size: large;
 text-align: center;
 }
@@ -35,4 +35,9 @@ text-align: center;
 .panel {
 	margin-right: 5%;
 	border: 0;
+	margin-bottom: 15%;
+}
+
+.btn-group {
+	margin-bottom: 15%;
 }
