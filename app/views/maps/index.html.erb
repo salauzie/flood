@@ -1,6 +1,4 @@
 <head>
-
-
   <style type="text/css">
   #map-canvas {
     height: 500px;
@@ -43,6 +41,29 @@
         };
 
         map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions), {mapTypeId: google.maps.MapTypeId.ROADMAP}; 
+
+      var charleston;
+
+      var polygonCoords = [
+        new google.maps.LatLng(32.781971, -79.941630),
+        new google.maps.LatLng(32.789349, -79.942338),
+        new google.maps.LatLng(32.789060, -79.950793),
+        new google.maps.LatLng(32.786806, -79.958432),
+        new google.maps.LatLng(32.780852, -79.955170),
+        new google.maps.LatLng(32.777948, -79.947038),
+        new google.maps.LatLng(32.781971, -79.941630)
+      ];
+
+      charleston = new google.maps.Polygon({
+        paths: polygonCoords,
+        strokeColor: '#203864',
+        strokeOpacity: 0.8,
+        strokeWeight: 2,
+        fillColor: '#5CBDFF',
+        fillOpacity: 0.35
+      });
+
+      charleston.setMap(map);
 
         var trafficLayer = new google.maps.TrafficLayer();
           $('#toggle_traffic').click(function () {
