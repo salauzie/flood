@@ -7,7 +7,7 @@
   </style>
   <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
   <script type="text/javascript"
-  src="https://maps.googleapis.com/maps/api/js?libraries=places,weather&sensor=true">  </script>
+  src="https://maps.googleapis.com/maps/api/js?libraries=places,geometry,weather&sensor=true">  </script>
   </script>
   <script type="text/javascript">
 
@@ -43,7 +43,8 @@
         map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions), {mapTypeId: google.maps.MapTypeId.ROADMAP}; 
 
       var charleston;
-
+     
+      // var insidePolygon = polygonColor.containsLatLng(input1);
       var polygonCoords = [
         new google.maps.LatLng(32.781971, -79.941630),
         new google.maps.LatLng(32.789349, -79.942338),
@@ -55,15 +56,39 @@
       ];
 
       charleston = new google.maps.Polygon({
-        paths: polygonCoords,
-        strokeColor: '#203864',
-        strokeOpacity: 0.8,
-        strokeWeight: 2,
-        fillColor: '#5CBDFF',
-        fillOpacity: 0.35
+        paths: polygonCoords
+        // strokeColor: '#203864',
+        // strokeOpacity: 0.8,
+        // strokeWeight: 2,
+        // fillColor: '#5CBDFF',
+        // fillOpacity: 0.35
       });
 
-      charleston.setMap(map);
+      // charleston.setMap(map);
+        google.maps.event.addListener(map, 'click', function(e) {
+    var result;
+    if (google.maps.geometry.poly.containsLocation(e.latLng, charleston)) {
+      result = 'red';
+    } else {
+      result = 'green';
+    }
+
+    var circle = {
+      path: google.maps.SymbolPath.CIRCLE,
+      fillColor: result,
+      fillOpacity: .2,
+      strokeColor: 'white',
+      strokeWeight: .5,
+      scale: 10
+    };
+
+    new google.maps.Marker({
+      position: e.latLng,
+      map: map,
+      icon: circle
+    })
+  });
+      
 
         var trafficLayer = new google.maps.TrafficLayer();
           $('#toggle_traffic').click(function () {
@@ -95,7 +120,6 @@
     // Add a listener for the click event and call getElevation on that location
   google.maps.event.addListener(map, 'click', getElevation);
       }
-
 
 
 function calculateRoute(from, to) {
