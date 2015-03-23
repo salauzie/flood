@@ -32,7 +32,7 @@
         };
         map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions), {mapTypeId: google.maps.MapTypeId.ROADMAP}; 
       var charleston;
-     
+      var charleston1;
       // var insidePolygon = polygonColor.containsLatLng(input1);
       var polygonCoords = [
         new google.maps.LatLng(32.769067, -79.930258),
@@ -77,27 +77,104 @@
         fillOpacity: 0.35
       });
       charleston.setMap(map);
-        google.maps.event.addListener(map, 'click', function(e) {
-    var result;
-    if (google.maps.geometry.poly.containsLocation(e.latLng, charleston)) {
-      result = 'red';
-    } else {
-      result = 'green';
-    }
-    var circle = {
-      path: google.maps.SymbolPath.CIRCLE,
-      fillColor: result,
-      fillOpacity: .2,
-      strokeColor: 'white',
-      strokeWeight: .5,
-      scale: 10
-    };
-    new google.maps.Marker({
-      position: e.latLng,
-      map: map,
-      icon: circle
-    })
-  });
+
+       var polygonCoords1 = [
+        new google.maps.LatLng(32.787072, -79.933906),
+        new google.maps.LatLng(32.790607, -79.926267),
+        new google.maps.LatLng(32.786075, -79.923649),
+        // new google.maps.LatLng(32.788384, -79.924850),
+        new google.maps.LatLng(32.786219, -79.921503),
+        new google.maps.LatLng(32.780735, -79.923220),
+        new google.maps.LatLng(32.780433, -79.930215),
+        new google.maps.LatLng(32.781082, -79.930472),
+        new google.maps.LatLng(32.781804, -79.926267),
+        new google.maps.LatLng(32.783644, -79.926610),
+        new google.maps.LatLng(32.788226, -79.929743),
+        new google.maps.LatLng(32.787108, -79.932361),
+        new google.maps.LatLng(32.787072, -79.933906)
+        ];
+
+      charleston1 = new google.maps.Polygon({
+        paths: polygonCoords1,
+        strokeColor: '#203864',
+        strokeOpacity: 0.8,
+        strokeWeight: 2,
+        fillColor: '#5CBDFF',
+        fillOpacity: 0.35
+      });
+      charleston1.setMap(map);
+
+      var polygonCoords2 = [
+        new google.maps.LatLng(32.769139, -79.928713),
+        new google.maps.LatLng(32.772495, -79.927340),
+        new google.maps.LatLng(32.773325, -79.925365),
+        // new google.maps.LatLng(32.774046, -79.924593),
+        // new google.maps.LatLng(32.774299, -79.925623),
+        new google.maps.LatLng(32.779892, -79.923778),
+        new google.maps.LatLng(32.779964, -79.924464),
+        // new google.maps.LatLng(32.779892, -79.923778),
+        new google.maps.LatLng(32.773722, -79.926653),
+        // new google.maps.LatLng(),
+        new google.maps.LatLng(32.772892, -79.927812),
+        new google.maps.LatLng(32.773649, -79.930472),
+        new google.maps.LatLng(32.773144, -79.930387),
+        new google.maps.LatLng(32.772386, -79.928026),
+        new google.maps.LatLng(32.769103, -79.929399),
+        new google.maps.LatLng(32.769139, -79.928713),
+        ];
+
+      var polygonCoords3 = [
+        new google.maps.LatLng(32.802381, -79.931974),
+        new google.maps.LatLng(32.793218, -79.926910),
+        new google.maps.LatLng(32.791487, -79.933691),
+        new google.maps.LatLng(32.793638, -79.934807),
+        new google.maps.LatLng(32.795189, -79.932189),
+        new google.maps.LatLng(32.800708, -79.934978),
+        // new google.maps.LatLng(),
+        // new google.maps.LatLng(),
+        new google.maps.LatLng(32.802381, -79.931974)
+        ];
+
+      charleston2 = new google.maps.Polygon({
+        paths: polygonCoords2,
+        strokeColor: '#203864',
+        strokeOpacity: 0.8,
+        strokeWeight: 2,
+        fillColor: '#5CBDFF',
+        fillOpacity: 0.35
+      });
+      charleston2.setMap(map);
+
+      charleston3 = new google.maps.Polygon({
+        paths: polygonCoords3,
+        strokeColor: '#203864',
+        strokeOpacity: 0.8,
+        strokeWeight: 2,
+        fillColor: '#5CBDFF',
+        fillOpacity: 0.35
+      });
+      charleston3.setMap(map);
+  //       google.maps.event.addListener(map, 'click', function(e) {
+  //   var result;
+  //   if (google.maps.geometry.poly.containsLocation(e.latLng, charleston)) {
+  //     result = 'red';
+  //   } else {
+  //     result = 'green';
+  //   }
+  //   var circle = {
+  //     path: google.maps.SymbolPath.CIRCLE,
+  //     fillColor: result,
+  //     fillOpacity: .2,
+  //     strokeColor: 'white',
+  //     strokeWeight: .5,
+  //     scale: 10
+  //   };
+  //   new google.maps.Marker({
+  //     position: e.latLng,
+  //     map: map,
+  //     icon: circle
+  //   })
+  // });
       
         var trafficLayer = new google.maps.TrafficLayer();
           $('#toggle_traffic').click(function () {
@@ -211,7 +288,9 @@ function getElevation(event) {
         $("#from-link, #to-link").click(function(event) {
           event.preventDefault();
           var addressId = this.id.substring(0, this.id.indexOf("-"));
- 
+        $('#reset').click(function() {
+           location.reload();
+        });
           navigator.geolocation.getCurrentPosition(function(position) {
             var geocoder = new google.maps.Geocoder();
             geocoder.geocode({
@@ -277,6 +356,7 @@ function getElevation(event) {
 <button id="toggle_weather" class="btn btn-default btn-lg"> Weather 
 <span class="icon-cloud"></span></button>
 </div>
+<div class="well"><span class="icon-droplet"></span> Flooding in Charleston is most likely to occur with a combination of rain and high tide. Elevations of 3 meters and below are the areas that are most affected by flooding.</div>
 <div class="well"><span class="icon-droplet"></span> Click anywhere on the map to retrieve the elevation of that point.</div>
 </form>
 
