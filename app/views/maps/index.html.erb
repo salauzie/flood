@@ -13,6 +13,9 @@
     var directionsDisplay;
     var elevator;
     var infowindow = new google.maps.InfoWindow();
+    var directionsService;
+    var directionsRequest; 
+
     function initialize(location)
     {
     console.log(location);
@@ -217,9 +220,8 @@
 // });
 
 function calculateRoute(from, to) {
-  var directionsService = new google.maps.DirectionsService();
-
-  var directionsRequest = {
+  directionsService = new google.maps.DirectionsService();
+  directionsRequest = {
     origin: from,
     destination: to,
     // waypoints: waypoints,
@@ -233,7 +235,7 @@ function calculateRoute(from, to) {
     draggable: true
   };
 
-  var directionsDisplay = new google.maps.DirectionsRenderer(rendererOptions);
+  directionsDisplay = new google.maps.DirectionsRenderer(rendererOptions);
     directionsDisplay.setMap(map);
     console.log('im firing');
     directionsDisplay.setPanel(document.getElementById('panel'));
@@ -261,17 +263,31 @@ function calculateRoute(from, to) {
           $("#error").append("Unable to retrieve your route<br />");
         }
       );
-      // $("#reset").click(function() {
-
-      $(document).on('click', '#reset', function() {
-        console.log("bla")
-        // directionsDisplay.setPanel();
-        // $("#from").val('');
-        // $("#to").val('');
-        // $("#panel").html("");
-        // $("#map-canvas").html("");
-        // calculateRoute(null,null);
+      $("#reset").click(function() {
+        directionsDisplay.setPanel(null);
       });
+
+      //     // directionsRequest = {
+      //     //   origin: null,
+      //     //   destination: null,
+      //     //   // waypoints: waypoints,
+      //     //   // optimizeWaypoints: true,
+      //     //   provideRouteAlternatives: true,
+      //     //   travelMode: google.maps.DirectionsTravelMode.DRIVING,
+      //     //   unitSystem: google.maps.UnitSystem.IMPERIAL
+      //     // };
+      // });
+
+      // $(document).on('click', '#reset', function() {
+      //   console.log("bla")
+      // });
+        // directionsDisplay.setPanel();
+      //   // $("#from").val('');
+      //   // $("#to").val('');
+      //   // $("#panel").html("");
+      //   // $("#map-canvas").html("");
+      //   // calculateRoute(null,null);
+      // });
     }
 
 function getElevation(event) {
@@ -335,7 +351,8 @@ function getElevation(event) {
         $("#calculate-route").submit(function(event) {
           event.preventDefault();
           calculateRoute($("#from").val(), $("#to").val());
-        }); 
+        });
+
 
         navigator.geolocation.getCurrentPosition(initialize);
       });
@@ -353,7 +370,7 @@ function getElevation(event) {
 
 <div class="input-group">  
   <label for="from" class="input-group-addon">From:</label>
-  <input type="text" class="form-control" id="from" name="from" required="required" placeholder="Start typing or click the location button" size="30" />
+  <input type="text" class="form-control" id="from" name="from" placeholder="Start typing or click the location button" size="30" />
   <span class="input-group-btn">
   <a id="from-link" href="#" class="btn btn-default"><span class="icon-location-arrow"></span></a>
 </span>
@@ -362,7 +379,7 @@ function getElevation(event) {
  <br>
  <div class="input-group">
   <label for="to" class="input-group-addon">To:</label>
-  <input type="text" id="to" class="form-control" name="to" required="required" placeholder="Start typing or click the location button" size="30" />
+  <input type="text" id="to" class="form-control" name="to" placeholder="Start typing or click the location button" size="30" />
   <span class="input-group-btn">
   <a id="to-link" href="#" class="btn btn-default"><span class="icon-location-arrow"></a>
 </span>
@@ -370,7 +387,7 @@ function getElevation(event) {
   <br />
  <div class="btn-group" role="group" aria-label="...">
   <input type="submit" class="btn btn-default btn-lg"/>
-  <button id="reset" class="btn btn-default btn-lg"/>Reset</Button>
+ <input id="reset" class="btn btn-default btn-lg"type="reset" value="Reset">
 <button id="toggle_traffic" class="btn btn-default btn-lg"> Traffic
 <span class="icon-taxi-park-front"></span>
 </button>
@@ -384,6 +401,7 @@ function getElevation(event) {
 <div>
 <div id="panel" class="panel" style="width: 45%; float: right;"></div>
 </div> 
+
 </body>
 
 
