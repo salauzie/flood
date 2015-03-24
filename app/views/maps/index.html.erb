@@ -232,6 +232,7 @@ function calculateRoute(from, to) {
   };
 
   var rendererOptions = {
+    map: map,
     draggable: true
   };
 
@@ -265,6 +266,7 @@ function calculateRoute(from, to) {
       );
       $("#reset").click(function() {
         directionsDisplay.setPanel(null);
+        directionsDisplay.setMap(null);
       });
 
       //     // directionsRequest = {
