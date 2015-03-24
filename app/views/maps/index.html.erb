@@ -235,6 +235,7 @@ function calculateRoute(from, to) {
     map: map,
     draggable: true
   };
+  var routes = [];
 
   directionsDisplay = new google.maps.DirectionsRenderer(rendererOptions);
     directionsDisplay.setMap(map);
@@ -247,12 +248,13 @@ function calculateRoute(from, to) {
         // responsible for getting alternate routes
         if (status == google.maps.DirectionsStatus.OK)
         {
-          for (var i = 0, len = response.routes.length; i < len; i++) {
+          for (var i = 0, len = response.routes.length; i < len; i++) { var routepathways =
                 new google.maps.DirectionsRenderer({
                     map: map,
                     directions: response,
                     routeIndex: i
                 });
+              routes.push(routepathways);  
             }
           directionsDisplay.setDirections(response);
           // new google.maps.DirectionsRenderer({
@@ -267,6 +269,10 @@ function calculateRoute(from, to) {
       $("#reset").click(function() {
         directionsDisplay.setPanel(null);
         directionsDisplay.setMap(null);
+        for (i=0; i<routes.length; i++)
+        {
+          routes[i].setMap(null);
+        }
       });
 
       //     // directionsRequest = {
