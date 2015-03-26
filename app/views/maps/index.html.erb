@@ -18,11 +18,9 @@
     var elevator;
     var chart;
     var infowindow = new google.maps.InfoWindow();
-    var directionsService;
+    var directionsService = new google.maps.DirectionsService();
     var directionsRequest;
-    var polyline; 
-    var start = new google.maps.LatLng(32.769139, -79.928713);
-    var end = new google.maps.LatLng(32.772819, -79.943647);
+    // var polyline;
 
     function initialize(location)
     {
@@ -47,6 +45,12 @@
       var charleston2;
       var charleston3;
       // var insidePolygon = polygonColor.containsLatLng(input1);
+      directionsDisplay = new google.maps.DirectionsRenderer(rendererOptions);
+      var rendererOptions = {
+        map: map,
+        draggable: true
+      };
+      directionsDisplay.setMap(map);
       var polygonCoords = [
         new google.maps.LatLng(32.769067, -79.930258),
         new google.maps.LatLng(32.769716, -79.936824),
@@ -230,7 +234,7 @@
 // });
 
 function calculateRoute(from, to) {
-  directionsService = new google.maps.DirectionsService();
+  // directionsService = new google.maps.DirectionsService();
   directionsRequest = {
     origin: from,
     destination: to,
@@ -241,15 +245,15 @@ function calculateRoute(from, to) {
     unitSystem: google.maps.UnitSystem.IMPERIAL
   };
 
-  var rendererOptions = {
-    map: map,
-    draggable: true
-  };
+  // var rendererOptions = {
+  //   map: map,
+  //   draggable: true
+  // };
   
   var routes = [];
 
-  directionsDisplay = new google.maps.DirectionsRenderer(rendererOptions);
-    directionsDisplay.setMap(map);
+  // directionsDisplay = new google.maps.DirectionsRenderer(rendererOptions);
+    // directionsDisplay.setMap(map);
     console.log('im firing');
     directionsDisplay.setPanel(document.getElementById('panel'));
     directionsService.route(
@@ -449,8 +453,6 @@ function getElevation(event) {
 <div>
 <div id="map-canvas"></div>
 <br>
-<div id="elevation_chart"></div>
-<br>
  <form id="calculate-route" name="calculate-route" action="#" method="get" style="width: 45%; float: left;">
 
 
@@ -486,8 +488,7 @@ function getElevation(event) {
 
 <div>
 <div id="panel" class="panel" style="width: 45%; float: right;"></div>
-<!-- <div id="elevation_chart"></div> -->
+<div id="elevation_chart"></div>
 </div> 
 
 </body>
-
