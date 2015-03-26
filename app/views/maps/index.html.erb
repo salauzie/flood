@@ -8,13 +8,21 @@
   <script type="text/javascript"
   src="https://maps.googleapis.com/maps/api/js?libraries=places,geometry,weather&sensor=true">  </script>
   </script>
+  <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+
   <script type="text/javascript">
+
+  google.load("visualization", "1", {packages: ["columnchart"]});
     var map;
     var directionsDisplay;
     var elevator;
+    var chart;
     var infowindow = new google.maps.InfoWindow();
     var directionsService;
-    var directionsRequest; 
+    var directionsRequest;
+    var polyline; 
+    var start = new google.maps.LatLng(32.769139, -79.928713);
+    var end = new google.maps.LatLng(32.772819, -79.943647);
 
     function initialize(location)
     {
@@ -204,6 +212,8 @@
           }
         });
         elevator = new google.maps.ElevationService();
+
+        // drawPath();
     
     // Add a listener for the click event and call getElevation on that location
   google.maps.event.addListener(map, 'click', getElevation);
@@ -235,6 +245,7 @@ function calculateRoute(from, to) {
     map: map,
     draggable: true
   };
+  
   var routes = [];
 
   directionsDisplay = new google.maps.DirectionsRenderer(rendererOptions);
@@ -248,7 +259,7 @@ function calculateRoute(from, to) {
         // responsible for getting alternate routes
         if (status == google.maps.DirectionsStatus.OK)
         {
-          for (var i = 0, len = response.routes.length; i < len; i++) { var routepathways =
+          for (var i = 0, len = response.routes.length; i < len; i++) { routepathways =
                 new google.maps.DirectionsRenderer({
                     map: map,
                     directions: response,
@@ -257,6 +268,7 @@ function calculateRoute(from, to) {
               routes.push(routepathways);  
             }
           directionsDisplay.setDirections(response);
+          drawPath(response);
           // new google.maps.DirectionsRenderer({
           //   map: map,
           //   directions: response
@@ -297,6 +309,70 @@ function calculateRoute(from, to) {
       //   // calculateRoute(null,null);
       // });
     }
+
+
+function drawPath(route) {
+
+  // Create a new chart in the elevation_chart DIV.
+  chart = new google.visualization.ColumnChart(document.getElementById('elevation_chart'));
+
+  var path = route.routes[0].overview_path;
+  console.log(route);
+
+  // Create a PathElevationRequest object using this array.
+  // Ask for 256 samples along that path.
+  var pathRequest = {
+    'path': path,
+    'samples': 100
+  }
+
+  // Initiate the path request.
+  elevator.getElevationAlongPath(pathRequest, plotElevation);
+}
+
+// Takes an array of ElevationResult objects, draws the path on the map
+// and plots the elevation profile on a Visualization API ColumnChart.
+function plotElevation(results, status) {
+  if (status != google.maps.ElevationStatus.OK) {
+    return;
+  }
+  var elevations = results;
+
+  // Extract the elevation samples from the returned results
+  // and store them in an array of LatLngs.
+  var elevationPath = [];
+  for (var i = 0; i < results.length; i++) {
+    elevationPath.push(elevations[i].location);
+  }
+
+  // Display a polyline of the elevation path.
+  // var pathOptions = {
+  //   path: elevationPath,
+  //   strokeColor: '#0000CC',
+  //   opacity: 0.4,
+  //   map: map
+  // }
+  // polyline = new google.maps.Polyline(pathOptions);
+
+  // Extract the data from which to populate the chart.
+  // Because the samples are equidistant, the 'Sample'
+  // column here does double duty as distance along the
+  // X axis.
+  var data = new google.visualization.DataTable();
+  data.addColumn('string', 'Sample');
+  data.addColumn('number', 'Elevation');
+  for (var i = 0; i < results.length; i++) {
+    data.addRow(['', elevations[i].elevation]);
+  }
+
+  // Draw the chart using the data within its DIV.
+  document.getElementById('elevation_chart').style.display = 'block';
+  chart.draw(data, {
+    height: 150,
+    legend: 'none',
+    titleY: 'Elevation (m)'
+  });
+}
 
 function getElevation(event) {
   var locations = [];
@@ -373,6 +449,8 @@ function getElevation(event) {
 <div>
 <div id="map-canvas"></div>
 <br>
+<div id="elevation_chart"></div>
+<br>
  <form id="calculate-route" name="calculate-route" action="#" method="get" style="width: 45%; float: left;">
 
 
@@ -408,8 +486,8 @@ function getElevation(event) {
 
 <div>
 <div id="panel" class="panel" style="width: 45%; float: right;"></div>
+<!-- <div id="elevation_chart"></div> -->
 </div> 
 
 </body>
-
 
