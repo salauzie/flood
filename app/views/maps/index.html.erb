@@ -284,6 +284,7 @@ function calculateRoute(from, to) {
       );
       $("#reset").click(function() {
         directionsDisplay.setPanel(null);
+       $('#elevation_chart').children().hide();
         directionsDisplay.setMap(null);
         for (i=0; i<routes.length; i++)
         {
@@ -486,9 +487,10 @@ function getElevation(event) {
 <div class="well"><span class="icon-droplet"></span> Click anywhere on the map to retrieve the elevation of that point.</div>
 </form>
 
-<div>
-<div id="panel" class="panel" style="width: 45%; float: right;"></div>
-<div id="elevation_chart"></div>
+<div style="width: 45%; float: right;">
+<div class="panel" id="panel"></div>
+<div class="panel" id="elevation_chart"></div>
 </div> 
+
 
 </body>
