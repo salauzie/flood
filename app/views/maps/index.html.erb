@@ -20,6 +20,10 @@
     var infowindow = new google.maps.InfoWindow();
     var directionsService = new google.maps.DirectionsService();
     var directionsRequest;
+    var rendererOptions = {
+    map: map,
+    draggable: true
+  };
     // var polyline;
 
     function initialize(location)
@@ -46,10 +50,10 @@
       var charleston3;
       // var insidePolygon = polygonColor.containsLatLng(input1);
       directionsDisplay = new google.maps.DirectionsRenderer(rendererOptions);
-      var rendererOptions = {
-        map: map,
-        draggable: true
-      };
+      // rendererOptions = {
+      //   map: map,
+      //   draggable: true
+      // };
       directionsDisplay.setMap(map);
       var polygonCoords = [
         new google.maps.LatLng(32.769067, -79.930258),
@@ -245,7 +249,7 @@ function calculateRoute(from, to) {
     unitSystem: google.maps.UnitSystem.IMPERIAL
   };
 
-  // var rendererOptions = {
+  // rendererOptions = {
   //   map: map,
   //   draggable: true
   // };
@@ -373,9 +377,11 @@ function plotElevation(results, status) {
   // Draw the chart using the data within its DIV.
   document.getElementById('elevation_chart').style.display = 'block';
   chart.draw(data, {
-    height: 150,
+    title: "Elevations Along Original Route",
+    height: 200,
     legend: 'none',
-    titleY: 'Elevation (m)'
+    titleY: 'Elevation (m)',
+    titleX: 'Route'
   });
 }
 
@@ -484,8 +490,9 @@ function getElevation(event) {
 <span class="icon-cloud"></span></button>
 </div>
 <div class="well"><span class="icon-droplet"></span> Flooding in Charleston is most likely to occur with a combination of rain and high tide. Elevations of 3 meters and below are the areas that are most affected by flooding.</div>
-<div class="well"><span class="icon-droplet"></span> Click anywhere on the map to retrieve the elevation of that point.</div>
+<div class="well"><span class="icon-droplet"></span> Click anywhere outside of the flood areas to retrieve the elevation of that point.</div>
 </form>
+
 
 <div style="width: 45%; float: right;">
 <div class="panel" id="panel"></div>
